@@ -7,7 +7,7 @@ const db = createClient(
 
 // console.log(db)
 export async function GET(req, res) {
-  const { data, error } = await db.from("users").select("*");
+  const { data, error } = await db.from("users").select("*")
 
   return Response.json({ data: data });
 }
