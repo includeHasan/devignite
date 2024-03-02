@@ -15,11 +15,14 @@ export async function GET()
 }
 export async function POST(req, res) {
     const info = await req.json();
+    
   
     try {
       
   
-      const { data, error } = await db.from("quiz_score").insert(info).select();
+      const { data, error } = await db.from("quiz_score").insert(
+        info.data
+      ).select();
   
       if (error) {
         console.error(error);
@@ -27,6 +30,7 @@ export async function POST(req, res) {
           success: false,
           message: "submission failed",
           error: error,
+         
         });
       }
   
@@ -34,11 +38,12 @@ export async function POST(req, res) {
         message: "Successfully submitted",
         success: true,
         data: data,
+  
       });
     } catch (error) {
       console.error(error);
      
-      return Response.json({ success: false, message: "Internal Server Error", error: error});
+      return Response.json({ success: false, message: "Internal Server Error", error: error.message});
     }
   }
   

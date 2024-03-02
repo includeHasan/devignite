@@ -1,0 +1,7 @@
+{
+  "data": [
+    { "user_id": "1", "subject": "subject", "score": "score" },
+    { "user_id": "2", "subject": "subject", "score": "score" },
+    { "user_id": "3", "subject": "subject", "score": "score" }
+  ]
+}
