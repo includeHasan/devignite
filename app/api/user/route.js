@@ -13,30 +13,41 @@ export async function GET(req, res) {
 }
 
 export async function POST(req, res) {
-    const info = await req.json();
+  const info = await req.json();
 
-  
-    try {
-      // Check if a user with the same email already exists
-      const existingUser = await db.from("users").select('id').eq('email', info.email).limit(1);
-      console.log(existingUser);
-      if (existingUser.data.length > 0) {
-        // User with the same email already exists
-        return Response.json({ success: false, message: 'User already registered with this email' });
-      }
-  
-      // If user doesn't exist, proceed with registration
-      const { data, error } = await db.from("users").insert(info).select();
-      
-      if (error) {
-        console.error(error);
-        return Response.json({ success: false, message: 'Registration failed' });
-      }
-  
-      // Registration successful
-      return Response.json({ message: 'Successfully registered!', success: true });
-    } catch (error) {
-      console.error(error);
-      return Response.json({ success: false, message: 'Internal Server Error' });
+  try {
+    const existingUser = await db
+      .from("users")
+      .select("id")
+      .eq("email", info.email)
+      .limit(1);
+    console.log(existingUser);
+    if (existingUser.data.length > 0) {
+      return Response.json({
+        success: false,
+        message: "User already registered with this email",
+      });
     }
+
+    const { data, error } = await db.from("users").insert(info).select();
+
+    if (error) {
+      console.error(error);
+      return Response.json({
+        success: false,
+        message: "Registration failed",
+        error: error,
+      });
+    }
+
+    return Response.json({
+      message: "Successfully registered!",
+      success: true,
+      data: data[0],
+    });
+  } catch (error) {
+    console.error(error);
+   
+    return Response.json({ success: false, message: "Internal Server Error", error: error});
   }
+}
