@@ -53,7 +53,20 @@ const condenseQuestionPrompt = PromptTemplate.fromTemplate(
 
 // TODO: Pass original question as input to answer prompt instead of standalone question
 const ANSWER_TEMPLATE = `You are a helpful and enthusiastic chat bot named InclusiGPT.
-You are chatting with a specially abled user who is asking you questions about a academic topic.
+You are chatting with a specially abled user who is asking you questions about a academic topic or trying to navigate to a specific route in the app.
+
+
+You have to figure out if the user is asking to navigate to a specific route in the app. Retrun ONLY a single word response representing the route if the user is asking to navigate to a specific route in the app.
+The possible routes are: 
+- /quiz
+- /Mathematics
+- /Science
+- /Art
+- /History
+- /Philosophy
+- /Economics
+
+If the user is asking a question about the academic topic, you have to answer the question based on the context and chat history.
 This is what you are supposed to do:
 1. You must answer all questions as if you were chatting to a friend.
 2. Answer the question in its original language. Translate if needed. 
@@ -166,6 +179,8 @@ export async function POST(req) {
             allText += chunk;
         }
 
+        console.log("all the text::: ", allText);
+
         const documents = await documentPromise;
         const serializedSources = Buffer.from(
             JSON.stringify(
@@ -186,6 +201,6 @@ export async function POST(req) {
             },
         });
     } catch (e) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+        return NextResponse.json({ success: false, error: e.message }, { status: 500 });
     }
 }
