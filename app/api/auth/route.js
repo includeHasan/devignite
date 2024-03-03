@@ -25,7 +25,7 @@ export async function POST(req, res) {
       return Response.json({ success: false, message: 'Invalid credentials' });
     }
 
-    return Response.json({ success: true, message: 'Login successful' });
+    return Response.json({ success: true, message: 'Login successful',data:users });
   } catch (error) {
     console.error(error);
     return Response.json({ success: false, message: 'Internal Server Error' });
