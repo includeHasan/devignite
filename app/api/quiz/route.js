@@ -8,7 +8,7 @@ const db = createClient(
 function getRandomQuestions(data) {
     const subjects = {};
 
-    // Group questions by subject
+  
     data.forEach(item => {
         if (!subjects[item.subject]) {
             subjects[item.subject] = [];
@@ -18,7 +18,6 @@ function getRandomQuestions(data) {
 
     const result = {};
 
-    // Select 3 random questions for each subject
     for (const subject in subjects) {
         result[subject] = [];
         const questions = subjects[subject];
@@ -47,4 +46,11 @@ export async function POST(req, res) {
         console.error(error);
         return Response.json({ success: false, message: 'Internal Server Error' });
     }
+}
+
+export async function GET(req, res) {
+    let { data: quiz_list, error } = await db
+    .from('quiz')
+    .select("*")
+    .eq("isAdult", params.isAdult)
 }
